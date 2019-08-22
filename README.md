@@ -72,3 +72,5 @@ runFlowFact().then(console.log).catch(console.error);
 ## TODO
 
 - [ ] tests
+- [ ] integrate ci (github actions)
+- [ ] integrate [semantic-release](https://www.npmjs.com/package/semantic-release)
