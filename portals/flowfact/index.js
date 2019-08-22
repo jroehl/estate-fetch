@@ -49,7 +49,11 @@ module.exports = class FlowFact {
    * @returns {promise<object>}
    */
   async getPictures(id) {
-    return this.getEstate(`${id}/pictures`);
+    const pictures = await rp({
+      ...this.defaultOptions,
+      uri: `${this.baseUrl}/${id}/pictures`,
+    });
+    if (pictures) return pictures.value;
   }
 
   /**
@@ -74,16 +78,19 @@ module.exports = class FlowFact {
       quality,
     };
 
-    const picture = await rp({
-      ...this.defaultOptions,
-      uri: file.href,
-      headers: {
-        ...this.defaultOptions.headers,
-        accept: 'application/octet-stream',
-      },
-      qs,
-      encoding: 'binary',
-    });
+    let picture;
+    try {
+      picture = await rp({
+        ...this.defaultOptions,
+        uri: file.href,
+        headers: {
+          ...this.defaultOptions.headers,
+          accept: 'application/octet-stream',
+        },
+        qs,
+        encoding: 'binary',
+      });
+    } catch (_) {}
 
     return { ...rest, picture, options: qs };
   }
@@ -94,8 +101,12 @@ module.exports = class FlowFact {
    * @returns {promise<array<object>>}
    */
   async getResolvedPictures(id, options) {
-    const { estatepicture } = await this.getPictures(id);
-    return Promise.all(estatepicture.map(picture => this.getPicture(picture, options)));
+    const pictures = await this.getPictures(id);
+    if (!pictures) return [];
+    const { estatepicture } = pictures;
+    return Promise.all(
+      estatepicture.map(picture => this.getPicture(picture, options))
+    );
   }
 
   /**
