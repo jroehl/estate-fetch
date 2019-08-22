@@ -130,8 +130,8 @@ const isArchived = (state = '') => {
 const getMeta = items => {
   return items.map(element => ({
     id: element.id || element['@id'],
-    active: element.active || isActive(element.realEstateState),
-    archived: element.archived || isArchived(element.realEstateState),
+    active: !element.realEstateState ? element.active : isActive(element.realEstateState),
+    archived: !element.realEstateState ? element.archived : isArchived(element.realEstateState),
     createdAt: sanitizeDate(
       element.created || // for flowfact
         element.creationDate ||
