@@ -98,9 +98,10 @@ const processEstate = (estate, options = {}) => {
   const rooms = details.find(detail => detail.name === 'rooms');
 
   const images =
-    pictures && pictures.total < 1
+    !pictures || pictures.total < 1
       ? []
       : pictures.estatepicture.map(pic => ({
+          filename: pic.filename,
           headline: pic.headline,
           rel: pic.placeholder.rel,
           id: pic.id,
