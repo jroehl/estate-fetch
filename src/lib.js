@@ -78,9 +78,48 @@ const sanitizeDate = date => {
  * @throws
  */
 const checkKeys = (keys, object, name = 'Credentials') => {
-  const missing = keys.filter(key => !object.hasOwnProperty(key));
-  if (missing.length) throw `${name} object validation failed\n"${missing.join('", "')}" missing`;
+  const missing = keys.filter(key => !object[key]);
+  if (missing.length) throw `${name} validation failed - "${missing.join('", "')}" missing`;
   return true;
+};
+
+/**
+ * Check if keys are available in object
+ * @param {array<string>} keys
+ * @param {object} [object={}]
+ * @throws
+ */
+const getCredentials = (keys, object = {}) => {
+  const { env } = process;
+  const credentials = keys.reduce(
+    (red, key) => ({
+      ...red,
+      [key]: object[key] || env[key] || env[key.toUpperCase()],
+    }),
+    {}
+  );
+  checkKeys(keys, credentials);
+  return credentials;
+};
+
+/**
+ * Sanitize the state of the estate
+ *
+ * @param {string} [state='']
+ * @returns {boolean}
+ */
+const isActive = (state = '') => {
+  return !state.match(/(INACTIVE)/i);
+};
+
+/**
+ * Sanitize the state of the estate
+ *
+ * @param {string} [state='']
+ * @returns {boolean}
+ */
+const isArchived = (state = '') => {
+  return !!state.match(/(ARCHIVED|TO_BE_DELETED)/i);
 };
 
 /**
@@ -91,6 +130,8 @@ const checkKeys = (keys, object, name = 'Credentials') => {
 const getMeta = items => {
   return items.map(element => ({
     id: element.id || element['@id'],
+    active: element.active || isActive(element.realEstateState),
+    archived: element.archived || isArchived(element.realEstateState),
     createdAt: sanitizeDate(
       element.created || // for flowfact
         element.creationDate ||
@@ -134,5 +175,6 @@ module.exports = {
   sanitizeDate,
   getMeta,
   checkKeys,
+  getCredentials,
   deepRenameProps,
 };

@@ -1,10 +1,10 @@
 const rp = require('request-promise-native');
-const { getMeta, checkKeys, getBasicAuthorization } = require('../../lib');
+const { getMeta, getCredentials, getBasicAuthorization } = require('../../lib');
 
 module.exports = class FlowFact {
   constructor(credentials) {
-    checkKeys(['customer', 'user', 'password'], credentials);
-    this.credentials = credentials;
+    const creds = getCredentials(['customer', 'user', 'password'], credentials);
+    this.credentials = creds;
     const { customer, user } = this.credentials;
     this.baseUrl = `https://flowfactapi.flowfact.com/com.flowfact.server/api/rest/v1.0/customers/${customer}/users/${user}/estates`;
     this.defaultOptions = {
@@ -104,9 +104,7 @@ module.exports = class FlowFact {
     const pictures = await this.getPictures(id);
     if (!pictures) return [];
     const { estatepicture } = pictures;
-    return Promise.all(
-      estatepicture.map(picture => this.getPicture(picture, options))
-    );
+    return Promise.all(estatepicture.map(picture => this.getPicture(picture, options)));
   }
 
   /**

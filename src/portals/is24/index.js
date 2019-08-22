@@ -1,11 +1,11 @@
 const rp = require('request-promise-native');
-const { getMeta, checkKeys, getOauthAuthorization } = require('../../lib');
+const { getMeta, getCredentials, getOauthAuthorization } = require('../../lib');
 
 module.exports = class IS24 {
-  constructor(credentials, baseUrl = 'https://rest.immobilienscout24.de/restapi/api/offer/v1.0/user/me/realestate') {
-    checkKeys(['oauth_consumer_key', 'consumer_secret', 'oauth_token', 'oauth_token_secret'], credentials);
-    this.credentials = credentials;
-    this.baseUrl = baseUrl;
+  constructor(credentials) {
+    const creds = getCredentials(['oauth_consumer_key', 'consumer_secret', 'oauth_token', 'oauth_token_secret'], credentials);
+    this.credentials = creds;
+    this.baseUrl = 'https://rest.immobilienscout24.de/restapi/api/offer/v1.0/user/me/realestate';
   }
 
   /**

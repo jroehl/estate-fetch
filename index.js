@@ -1,7 +1,7 @@
-const IS24 = require('./portals/is24');
-const FlowFact = require('./portals/flowfact');
-const { processEstate } = require('./portals/flowfact/utils');
-const { deepRenameProps } = require('./lib');
+const IS24 = require('./src/portals/is24');
+const FlowFact = require('./src/portals/flowfact');
+const { processEstate } = require('./src/portals/flowfact/utils');
+const { deepRenameProps } = require('./src/lib');
 
 module.exports = {
   FlowFact,

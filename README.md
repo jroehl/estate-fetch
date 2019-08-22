@@ -6,6 +6,7 @@ This module helps to fetch real estate data from [immobilienscout24](https://www
   - [Usage](#usage)
     - [immobilienscout24](#immobilienscout24)
     - [flowfact](#flowfact)
+  - [CLI](#cli)
   - [TODO](#todo)
 
 ## Usage
@@ -15,14 +16,14 @@ This module helps to fetch real estate data from [immobilienscout24](https://www
 To use this module you need to pre-generate credentials for your is24 account.
 
 ```node
-const { IS24, utils: { deepRenameProps } } = require('fetch-estates');
+const { IS24, utils: { deepRenameProps } } = require('estate-fetch');
 
 const runIs24 = async () => {
   const is24 = new IS24({
-    oauth_consumer_key: 'oauth_consumer_key',
-    consumer_secret: 'consumer_secret',
-    oauth_token: 'oauth_token',
-    oauth_token_secret: 'oauth_token_secret',
+    oauth_consumer_key: '<oauth_consumer_key>',
+    consumer_secret: '<consumer_secret>',
+    oauth_token: '<oauth_token>',
+    oauth_token_secret: '<oauth_token_secret>',
   });
 
   const estates = await is24.getEstates();
@@ -46,7 +47,7 @@ runIs24().then(console.log).catch(console.error);
 To use this module you need to use credentials for your flowfact account.
 
 ```node
-const { FlowFact, utils: { processFlowFactEstate } } = require('fetch-estates');
+const { FlowFact, utils: { processFlowFactEstate } } = require('estate-fetch');
 
 const runFlowFact = async () => {
   const flowFact = new FlowFact({
@@ -67,6 +68,16 @@ const runFlowFact = async () => {
 };
 
 runFlowFact().then(console.log).catch(console.error);
+```
+
+## CLI
+
+A small cli exists to fetch the estates list using npx.
+
+```bash
+USER="<user>" CUSTOMER="<customer>" PASSWORD="<password>" npx estate-fetch flowfact
+# or
+OAUTH_CONSUMER_KEY="<oauth_consumer_key>" CONSUMER_SECRET="<consumer_secret>" OAUTH_TOKEN="<oauth_token>" OAUTH_TOKEN_SECRET="<oauth_token_secret>" npx estate-fetch is24
 ```
 
 ## TODO

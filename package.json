@@ -1,10 +1,13 @@
 {
   "name": "estate-fetch",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "This module helps to fetch real estate data from immobilienscout24 and flowfact.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "estate-fetch": "bin/estate-fetch"
   },
   "keywords": [
     "immobilienscout24",
